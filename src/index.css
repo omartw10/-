@@ -137,3 +137,38 @@ html, body {
   0% { transform: translateY(-6px); }
   100% { transform: translateY(6px); }
 }
+
+.fullscreen-toggle {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 200;
+  background: var(--primary);
+  color: white;
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(216, 120, 88, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.fullscreen-toggle svg {
+  width: 22px;
+  height: 22px;
+}
+
+.fullscreen-toggle:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(216, 120, 88, 0.4);
+  background: var(--accent);
+}
+
+.fullscreen-toggle:active {
+  transform: translateY(0) scale(0.95);
+}

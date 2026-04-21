@@ -1,5 +1,5 @@
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 /* ══════════════════════════════════════════
    SVG Icon System — Professional & Minimalist
@@ -58,11 +58,11 @@ function Title({ children, color = 'var(--primary)' }) {
   return (
     <div style={{
       fontFamily: 'var(--font-pixel)',
-      fontSize: 'clamp(16px, 2.2vw, 26px)',
+      fontSize: 'clamp(15px, 2vw, 22px)',
       color,
       lineHeight: 1.6,
       direction: 'rtl',
-      marginBottom: '0.6rem',
+      marginBottom: '0.3rem',
     }}>
       {children}
     </div>
@@ -73,11 +73,12 @@ function BodyText({ children, style }) {
   return (
     <div style={{
       fontFamily: 'var(--font-arabic)',
-      color: 'var(--text-secondary)',
-      fontSize: 'clamp(14px, 1.7vw, 19px)',
-      lineHeight: 1.9,
+      color: 'var(--text-main)',
+      fontSize: 'clamp(13px, 1.5vw, 16px)',
+      lineHeight: 1.8,
       direction: 'rtl',
       textAlign: 'right',
+      fontWeight: 500,
       ...style,
     }}>
       {children}
@@ -121,35 +122,28 @@ const CHAPTERS = [
 function Sidebar({ currentStep }) {
   return (
     <div style={{
-      width: 190,
-      minWidth: 190,
+      width: 180,
+      minWidth: 180,
       background: 'var(--bg-card)',
       borderRight: '1px solid var(--border-light)',
-      padding: '1.2rem 1rem',
+      padding: '1rem 0.8rem',
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
     }}>
-      <div style={{ marginBottom: '1.5rem' }}>
-        <div style={{
-          fontFamily: 'var(--font-pixel)',
-          fontSize: 'clamp(7px, 0.8vw, 9px)',
-          color: 'var(--primary)',
-          letterSpacing: '0.2em',
-        }}>
-          INCIDENT REPORT
-        </div>
-        <div style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: '9px',
-          color: 'var(--text-muted)',
-          marginTop: 4,
-        }}>
-          APRIL 2026 · VERCEL DC
-        </div>
+      <div style={{
+        fontFamily: 'var(--font-pixel)',
+        fontSize: '9px',
+        color: 'var(--primary)',
+        letterSpacing: '0.18em',
+        marginBottom: '0.8rem',
+        paddingBottom: '0.6rem',
+        borderBottom: '1px solid var(--border-light)',
+      }}>
+        CHAPTERS · الفصول
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
         {CHAPTERS.map((ch, i) => {
           const active = currentStep === i;
           const done = i < currentStep;
@@ -161,40 +155,36 @@ function Sidebar({ currentStep }) {
                 x: active ? 4 : 0,
               }}
               style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '10px',
-                padding: '8px 6px',
+                padding: '8px 8px',
                 borderLeft: active ? '3px solid var(--primary)' : '3px solid transparent',
-                background: active ? 'rgba(216,120,88,0.06)' : 'transparent',
+                background: active ? 'rgba(216,120,88,0.08)' : 'transparent',
                 borderRadius: '0 4px 4px 0',
                 cursor: 'default',
+                direction: 'rtl',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span>{active ? '▶' : done ? '✓' : i + 1}</span>
-                <AnimatePresence>
-                  {active && (
-                    <motion.div
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: 'auto' }}
-                      style={{
-                        fontFamily: 'var(--font-arabic)',
-                        fontSize: '11px',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      {ch}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '11px',
+                  minWidth: 14,
+                  textAlign: 'center',
+                }}>{active ? '▶' : done ? '✓' : `0${i + 1}`}</span>
+                <div style={{
+                  fontFamily: 'var(--font-arabic)',
+                  fontSize: '12px',
+                  fontWeight: active ? 700 : 500,
+                  lineHeight: 1.4,
+                }}>
+                  {ch}
+                </div>
               </div>
             </motion.div>
           );
         })}
       </div>
 
-      <div style={{ marginTop: 'auto' }}>
+      <div style={{ marginTop: 'auto', paddingTop: '0.6rem' }}>
         <div style={{
           background: COLORS.danger,
           color: 'white',
@@ -203,18 +193,12 @@ function Sidebar({ currentStep }) {
           padding: '6px 10px',
           borderRadius: 4,
           textAlign: 'center',
-          animation: 'pulse 2s infinite',
+          letterSpacing: '0.1em',
+          animation: 'lpulse 2s infinite',
         }}>
           LIVE INVESTIGATION
         </div>
       </div>
-      <style>{`
-        @keyframes pulse {
-          0% { opacity: 1; }
-          50% { opacity: 0.6; }
-          100% { opacity: 1; }
-        }
-      `}</style>
     </div>
   );
 }
@@ -268,7 +252,7 @@ function NetworkNode({ title, role, color, icon: IconComp, delay, isTarget }) {
 
 function Step0() {
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
       <Label>Chapter 01</Label>
       <Title>الصيد في المكان الخطأ</Title>
       <BodyText>
@@ -354,7 +338,7 @@ function InfectionCard({ title, body, icon: IconComp, color, delay }) {
 
 function Step1() {
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
       <Label>Chapter 02</Label>
       <Title color={COLORS.danger}>الخطأ الذي غيّر كل شيء</Title>
       <BodyText>
@@ -390,7 +374,7 @@ function Step1() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1 }}
-        style={{ background: '#111', color: '#0F0', fontFamily: 'var(--font-mono)', padding: '1rem', borderRadius: 8, fontSize: '11px', direction: 'ltr' }}
+        style={{ background: '#111', color: '#0F0', fontFamily: 'var(--font-mono)', padding: '1rem 1.2rem', borderRadius: 8, fontSize: '12px', lineHeight: 1.7, direction: 'ltr' }}
       >
         &gt; lumen_stealer.exe -harvest all --silent<br />
         &gt; Found 12 candidate session tokens...<br />
@@ -405,7 +389,6 @@ function Step1() {
    STEP 2: Timeline
 ══════════════════════════════════════════ */
 function Step2() {
-  const barRef = useRef(null);
   const controls = useAnimation();
 
   useEffect(() => {
@@ -413,7 +396,7 @@ function Step2() {
   }, []);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
       <Label>Chapter 03</Label>
       <Title color={COLORS.warning}>شهر كامل في الظلام</Title>
       <BodyText>
@@ -421,39 +404,39 @@ function Step2() {
         الأكثر غرابة؟ أن شركة <strong>Hudson Rock</strong> حذرت من وجود هذه البيانات المسروقة قبل شهر، لكن لم يتم اتخاذ أي إجراء!
       </BodyText>
 
-      <Card style={{ padding: '2rem' }}>
-        <Label>اختراق دام 31 يوماً</Label>
-        <div style={{ position: 'relative', height: 40, background: 'var(--bg-page)', borderRadius: 20, marginBottom: '2rem', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+      <Card style={{ padding: '1.2rem 1.4rem', flex: 1, justifyContent: 'center' }}>
+        <Label>اختراق دام 31 يوماً بدون أن يلاحظه أحد</Label>
+        <div style={{ position: 'relative', height: 44, background: 'var(--bg-page)', borderRadius: 22, marginBottom: '1.4rem', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
           <motion.div
             initial={{ width: '0%' }}
             animate={controls}
             style={{ height: '100%', background: `linear-gradient(270deg, ${COLORS.danger}, ${COLORS.warning})` }}
           />
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 20px', fontFamily: 'var(--font-pixel)', fontSize: '10px', color: 'rgba(255,255,255,0.7)' }}>
-            <span>START: FEB 25</span>
-            <span>DISCOVERY: APR 19</span>
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 22px', fontFamily: 'var(--font-pixel)', fontSize: '10px', color: 'rgba(255,255,255,0.85)' }}>
+            <span>START · FEB 25</span>
+            <span>DISCOVERY · APR 19</span>
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-          <div style={{ borderLeft: `4px solid ${COLORS.danger}`, paddingLeft: '1rem' }}>
-            <div style={{ fontFamily: 'var(--font-pixel)', fontSize: '11px', color: COLORS.danger, marginBottom: 4 }}>LOST WARNING</div>
-            <BodyText style={{ fontSize: '14px' }}>
-              تم رصد البيانات في "الويب المظلم" وأُرسِل بلاغ لم يُقرأ.
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.4rem' }}>
+          <div style={{ borderRight: `4px solid ${COLORS.danger}`, paddingRight: '1rem' }}>
+            <div style={{ fontFamily: 'var(--font-pixel)', fontSize: '11px', color: COLORS.danger, marginBottom: 6 }}>LOST WARNING</div>
+            <BodyText style={{ fontSize: '15px' }}>
+              بيانات مسروقة ظهرت في "الويب المظلم" وتم إرسال بلاغ لم يُقرأ.
             </BodyText>
           </div>
-          <div style={{ borderLeft: `4px solid ${COLORS.warning}`, paddingLeft: '1rem' }}>
-            <div style={{ fontFamily: 'var(--font-pixel)', fontSize: '11px', color: COLORS.warning, marginBottom: 4 }}>OAUTH RISK</div>
-            <BodyText style={{ fontSize: '14px' }}>
-              المخترق لم يحتاج لكلمة مرور، الصلاحية كانت ممنوحة مسبقاً.
+          <div style={{ borderRight: `4px solid ${COLORS.warning}`, paddingRight: '1rem' }}>
+            <div style={{ fontFamily: 'var(--font-pixel)', fontSize: '11px', color: COLORS.warning, marginBottom: 6 }}>OAUTH RISK</div>
+            <BodyText style={{ fontSize: '15px' }}>
+              المخترق لم يحتَج كلمة مرور، الصلاحية كانت ممنوحة مسبقاً.
             </BodyText>
           </div>
         </div>
       </Card>
-      
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, alignSelf: 'center' }}>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, alignSelf: 'center', direction: 'rtl' }}>
         <IcoAlert size={18} color={COLORS.danger} />
-        <span style={{ fontFamily: 'var(--font-arabic)', fontSize: '14px', color: COLORS.danger }}>السرعة في الاستجابة كانت ستمنع كل ما حدث لاحقاً.</span>
+        <span style={{ fontFamily: 'var(--font-arabic)', fontSize: '14px', color: COLORS.danger, fontWeight: 700 }}>السرعة في الاستجابة كانت ستمنع كل ما حدث لاحقاً.</span>
       </div>
     </div>
   );
@@ -473,7 +456,7 @@ function Metric({ label, val, color }) {
 
 function Step3() {
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
       <Label>Chapter 04</Label>
       <Title color={COLORS.danger}>السقوط الكلي</Title>
       <BodyText>
@@ -499,8 +482,8 @@ function Step3() {
             </div>
           </Card>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed var(--border-light)', borderRadius: 12, padding: '1rem' }}>
-            <BodyText style={{ fontSize: '13px', textAlign: 'center', color: 'var(--text-muted)' }}>
-              تم بيع البيانات كـ "مدخل لشركات التكنولوجيا الكبرى"
+            <BodyText style={{ fontSize: '14px', textAlign: 'center', color: 'var(--text-secondary)' }}>
+              تُباع البيانات كـ "مدخل لشركات التكنولوجيا الكبرى"
             </BodyText>
           </div>
         </div>
@@ -533,7 +516,7 @@ function OutcomeCard({ title, items, color, isLost }) {
 
 function Step4() {
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
       <Label>Chapter 05</Label>
       <Title>الخسارة الحقيقية</Title>
       
@@ -558,16 +541,16 @@ function Step4() {
           background: 'var(--bg-card)',
           border: '2px solid var(--primary)',
           borderRadius: 16,
-          padding: '1.5rem',
+          padding: '1.1rem 1.4rem',
           textAlign: 'center',
           boxShadow: '0 15px 40px rgba(216,120,88,0.15)',
         }}
       >
-        <BodyText style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-main)', textAlign: 'center', marginBottom: 5 }}>
+        <BodyText style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text-main)', textAlign: 'center', marginBottom: 8 }}>
           كم أداة SaaS منحتَها صلاحيات OAuth على حساباتك في العمل؟
         </BodyText>
-        <div style={{ fontFamily: 'var(--font-pixel)', fontSize: '10px', color: 'var(--primary)' }}>
-          هذا السؤال لو طرحته Vercel قبل فبراير 2026، لتغير التاريخ.
+        <div style={{ fontFamily: 'var(--font-arabic)', fontSize: '12px', color: 'var(--primary)', fontWeight: 600 }}>
+          هذا السؤال لو طرحته Vercel قبل فبراير 2026، لتغيّر التاريخ.
         </div>
       </motion.div>
     </div>
@@ -584,28 +567,100 @@ export default function S12_VercelCase({ currentStep }) {
 
   return (
     <div style={{
-      display: 'grid',
-      gridTemplateColumns: '190px 1fr',
+      display: 'flex',
+      flexDirection: 'column',
       height: '100%',
       background: 'var(--bg-page)',
       borderRadius: 12,
       overflow: 'hidden',
     }}>
-      <Sidebar currentStep={currentStep} />
+      {/* Top Header Bar */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0.7rem 1.2rem',
+        background: 'var(--bg-card)',
+        borderBottom: '2px solid var(--primary)',
+        direction: 'rtl',
+        flexShrink: 0,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+          <div style={{
+            width: 8, height: 8,
+            background: COLORS.danger,
+            borderRadius: '50%',
+            animation: 'lpulse 1.6s infinite',
+          }} />
+          <div style={{
+            fontFamily: 'var(--font-pixel)',
+            fontSize: 'clamp(13px, 1.6vw, 16px)',
+            color: 'var(--primary)',
+          }}>
+            قصة اختراق Vercel
+          </div>
+          <div style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '11px',
+            color: 'var(--text-muted)',
+            letterSpacing: '0.1em',
+          }}>
+            · APRIL 2026 CASE
+          </div>
+        </div>
 
-      <div style={{ padding: 'clamp(1.2rem, 2vw, 2.2rem)', overflow: 'hidden' }}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentStep}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.4 }}
-            style={{ height: '100%' }}
-          >
-            <StepContent />
-          </motion.div>
-        </AnimatePresence>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          background: 'rgba(216,120,88,0.08)',
+          border: '1px dashed var(--primary)',
+          borderRadius: 20,
+          padding: '4px 12px',
+        }}>
+          <span style={{
+            fontFamily: 'var(--font-pixel)',
+            fontSize: '8px',
+            color: 'var(--primary)',
+            letterSpacing: '0.1em',
+          }}>
+            SIDE STORY
+          </span>
+          <span style={{ color: 'var(--border-light)' }}>|</span>
+          <span style={{
+            fontFamily: 'var(--font-arabic)',
+            fontSize: '11px',
+            color: 'var(--primary)',
+            fontWeight: 700,
+          }}>
+            قصة جانبية · ليست ضمن المقرر
+          </span>
+        </div>
+      </div>
+
+      {/* Body: Sidebar + Content */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '180px 1fr',
+        flex: 1,
+        overflow: 'hidden',
+      }}>
+        <Sidebar currentStep={currentStep} />
+
+        <div style={{ padding: 'clamp(1rem, 1.6vw, 1.8rem)', overflow: 'hidden' }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentStep}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.4 }}
+              style={{ height: '100%' }}
+            >
+              <StepContent />
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );

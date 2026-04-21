@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Mascot from './Mascot';
 import ProgressBar from './ProgressBar';
@@ -31,6 +31,8 @@ export default function Presentation() {
   const [bootDone, setBootDone] = useState(false);
   const [glitchActive, setGlitchActive] = useState(false);
   const [activeLab, setActiveLab] = useState(null); // null | 'sql' | 'prompt'
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const frameWrapperRef = useRef(null);
 
   useEffect(() => {
     const FRAME_W = 1100;
@@ -39,20 +41,29 @@ export default function Presentation() {
     const update = () => {
       cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
+        const isFS = !!document.fullscreenElement;
+        const padding = isFS ? 0 : 32; // 0 padding in fullscreen, 32px otherwise
         const scale = Math.min(
-          (window.innerWidth - 16) / FRAME_W,
-          (window.innerHeight - 16) / FRAME_H,
-          1
+          (window.innerWidth - padding) / FRAME_W,
+          (window.innerHeight - padding) / FRAME_H
         );
         document.documentElement.style.setProperty('--slide-scale', scale);
       });
     };
     update();
     window.addEventListener('resize', update);
+    document.addEventListener('fullscreenchange', update);
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener('resize', update);
+      document.removeEventListener('fullscreenchange', update);
     };
+  }, []);
+
+  useEffect(() => {
+    const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', handleFsChange);
+    return () => document.removeEventListener('fullscreenchange', handleFsChange);
   }, []);
 
   const slideConfig = useMemo(() => [
@@ -103,6 +114,19 @@ export default function Presentation() {
     }
   }, [totalSlides, currentSlide]);
 
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      const el = frameWrapperRef.current;
+      if (el && el.requestFullscreen) {
+        el.requestFullscreen().catch(err => {
+          console.error(`Error: ${err.message}`);
+        });
+      }
+    } else {
+      if (document.exitFullscreen) document.exitFullscreen();
+    }
+  };
+
   if (!bootDone) {
     return <BootSequence onComplete={() => setBootDone(true)} />;
   }
@@ -110,7 +134,24 @@ export default function Presentation() {
   const SlideComponent = activeConfig.component;
 
   return (
-    <div className="frame-wrapper">
+    <div className="frame-wrapper" ref={frameWrapperRef}>
+      <button 
+        className="fullscreen-toggle" 
+        onClick={toggleFullscreen}
+        title={isFullscreen ? "تصغير الشاشة" : "عرض كامل الشاشة (F11)"}
+        aria-label="Toggle Fullscreen"
+      >
+        {isFullscreen ? (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+          </svg>
+        )}
+      </button>
+
       <div className="slide-frame">
         <div className="scanlines" />
 
