@@ -1,10 +1,12 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Mascot from './Mascot';
 import ProgressBar from './ProgressBar';
 import BootSequence from './BootSequence';
 import GlitchTransition from './GlitchTransition';
 import Slide from './Slide';
+import LabSQLContent from '../lab-pages/LabSQL';
+import LabPromptContent from '../lab-pages/LabPrompt';
 
 // Slide Imports
 import S01_Cover from '../slides/S01_Cover';
@@ -18,6 +20,7 @@ import S08_Escape from '../slides/S08_Escape';
 import S09_Glasswing from '../slides/S09_Glasswing';
 import S10_Protect from '../slides/S10_Protect';
 import S11_Economics from '../slides/S11_Economics';
+import S12_VercelCase from '../slides/S12_VercelCase';
 import S12_LabSQL from '../slides/S12_LabSQL';
 import S13_LabPrompt from '../slides/S13_LabPrompt';
 import S14_Ending from '../slides/S14_Ending';
@@ -27,6 +30,30 @@ export default function Presentation() {
   const [currentStep, setCurrentStep] = useState(0);
   const [bootDone, setBootDone] = useState(false);
   const [glitchActive, setGlitchActive] = useState(false);
+  const [activeLab, setActiveLab] = useState(null); // null | 'sql' | 'prompt'
+
+  useEffect(() => {
+    const FRAME_W = 1100;
+    const FRAME_H = 618.75;
+    let rafId;
+    const update = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const scale = Math.min(
+          (window.innerWidth - 16) / FRAME_W,
+          (window.innerHeight - 16) / FRAME_H,
+          1
+        );
+        document.documentElement.style.setProperty('--slide-scale', scale);
+      });
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', update);
+    };
+  }, []);
 
   const slideConfig = useMemo(() => [
     { component: S01_Cover,      totalSteps: 1, eyeState: 'normal',  useGlitch: false, mascotPos: 'bottom-right' },
@@ -40,6 +67,7 @@ export default function Presentation() {
     { component: S09_Glasswing,  totalSteps: 3, eyeState: 'safe',    useGlitch: false, mascotPos: 'bottom-right' },
     { component: S10_Protect,    totalSteps: 4, eyeState: 'safe',    useGlitch: false, mascotPos: 'top-left'     },
     { component: S11_Economics,  totalSteps: 2, eyeState: 'threat',  useGlitch: false, mascotPos: 'top-right'    },
+    { component: S12_VercelCase, totalSteps: 5, eyeState: 'threat',  useGlitch: true,  mascotPos: 'bottom-left'  },
     { component: S12_LabSQL,     totalSteps: 1, eyeState: 'excited', useGlitch: false, mascotPos: 'bottom-left'  },
     { component: S13_LabPrompt,  totalSteps: 1, eyeState: 'excited', useGlitch: false, mascotPos: 'bottom-right' },
     { component: S14_Ending,     totalSteps: 1, eyeState: 'wink',    useGlitch: false, mascotPos: 'bottom-right' },
@@ -59,7 +87,6 @@ export default function Presentation() {
     }
   }, [currentSlide, totalSlides, slideConfig]);
 
-  // Go back to the LAST step of the previous slide
   const handlePrev = useCallback(() => {
     if (currentSlide > 0) {
       const prevIdx = currentSlide - 1;
@@ -69,7 +96,6 @@ export default function Presentation() {
     }
   }, [currentSlide, slideConfig]);
 
-  // Jump to any slide via the nav bar
   const goToSlide = useCallback((index) => {
     if (index >= 0 && index < totalSlides && index !== currentSlide) {
       setCurrentSlide(index);
@@ -87,7 +113,7 @@ export default function Presentation() {
     <div className="frame-wrapper">
       <div className="slide-frame">
         <div className="scanlines" />
-        
+
         <AnimatePresence mode="wait">
           <Slide
             key={currentSlide}
@@ -98,16 +124,16 @@ export default function Presentation() {
             onStepChange={setCurrentStep}
             useGlitch={activeConfig.useGlitch}
           >
-            {(step) => <SlideComponent currentStep={step} />}
+            {(step) => <SlideComponent currentStep={step} onOpenLab={setActiveLab} />}
           </Slide>
         </AnimatePresence>
 
-        <Mascot 
-          eyeState={activeConfig.eyeState} 
+        <Mascot
+          eyeState={activeConfig.eyeState}
           position={activeConfig.mascotPos}
-          size={70} 
+          size={70}
         />
-        
+
         <ProgressBar
           currentSlide={currentSlide}
           totalSlides={totalSlides}
@@ -117,6 +143,24 @@ export default function Presentation() {
         />
 
         <GlitchTransition active={glitchActive} />
+
+        {/* Lab overlay — renders on top of the current slide, within the frame */}
+        {activeLab && (
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 150,
+            background: 'rgba(241, 230, 208, 0.97)',
+            backdropFilter: 'blur(2px)',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+          }}>
+            {activeLab === 'sql'
+              ? <LabSQLContent onClose={() => setActiveLab(null)} />
+              : <LabPromptContent onClose={() => setActiveLab(null)} />
+            }
+          </div>
+        )}
       </div>
     </div>
   );

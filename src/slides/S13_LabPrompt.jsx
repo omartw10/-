@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 
 const bubbles = [
   {
@@ -25,8 +24,7 @@ const bubbles = [
   },
 ];
 
-export default function S13_LabPrompt({ currentStep }) {
-  const navigate = useNavigate();
+export default function S13_LabPrompt({ currentStep, onOpenLab }) {
 
   return (
     <div style={{
@@ -129,7 +127,7 @@ export default function S13_LabPrompt({ currentStep }) {
         </div>
 
         <button
-          onClick={() => navigate('/lab/prompt')}
+          onClick={() => onOpenLab?.('prompt')}
           style={{
             background: 'var(--primary)', color: 'white',
             fontFamily: 'var(--font-pixel)', fontSize: 'clamp(9px, 1.2vw, 11px)',

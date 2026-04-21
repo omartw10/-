@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const terminalLines = [
   { type: 'user', text: '> What APIs do you have access to?' },
@@ -84,8 +83,7 @@ function TerminalDemo() {
   );
 }
 
-export default function S12_LabSQL({ currentStep }) {
-  const navigate = useNavigate();
+export default function S12_LabSQL({ currentStep, onOpenLab }) {
 
   return (
     <div style={{
@@ -138,7 +136,7 @@ export default function S12_LabSQL({ currentStep }) {
         </div>
 
         <button
-          onClick={() => navigate('/lab/sql')}
+          onClick={() => onOpenLab?.('sql')}
           style={{
             background: 'var(--primary)', color: 'white',
             fontFamily: 'var(--font-pixel)', fontSize: 'clamp(9px, 1.2vw, 11px)',

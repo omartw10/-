@@ -13,6 +13,7 @@
   --font-pixel: 'Press Start 2P', monospace;
   --font-arabic: 'IBM Plex Sans Arabic', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+  --slide-scale: 1;
 }
 
 * {
@@ -31,22 +32,27 @@ html, body {
   overflow: hidden;
 }
 
+/* ─── Wrapper: fixed full-screen, clips overflow from scaled frame ─── */
 .frame-wrapper {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--bg-page);
 }
 
-/* ─── Claude Code Pixel Frame ─── */
+/* ─── Slide Frame: fixed natural 16:9 size, scaled & centered ─── */
 .slide-frame {
-  max-width: 1100px;
-  width: 100%;
-  aspect-ratio: 16 / 9;
+  position: absolute;
+  width: 1100px;
+  height: 618.75px;         /* 1100 * 9/16 */
+  top: 50%;
+  left: 50%;
+  margin-top: -309.375px;   /* -618.75 / 2 */
+  margin-left: -550px;      /* -1100 / 2 */
+  transform: scale(var(--slide-scale));
+  transform-origin: center center;
+
   background: var(--bg-page);
-  position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -95,24 +101,36 @@ html, body {
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M20 8l-8 8 8 8' stroke='%23D87858' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 16 16, pointer;
 }
 
-@media (max-width: 1100px) {
-  .frame-wrapper {
-    padding: 10px;
-  }
-  .slide-frame {
-    aspect-ratio: 16 / 9;
-    height: auto;
-    outline-offset: 2px;
-  }
-  .slide-frame::after {
-    top: -8px; left: -8px;
-    right: -8px; bottom: -8px;
-  }
+/* ─── Custom Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-card-alt);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 99px;
+  transition: background 0.2s;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) var(--bg-card-alt);
 }
 
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+@keyframes lpulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
 }
 
 @keyframes float {
