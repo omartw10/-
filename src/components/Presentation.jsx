@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import Mascot from './Mascot';
+import SlideSticker from './SlideSticker';
 import ProgressBar from './ProgressBar';
 import BootSequence from './BootSequence';
 import GlitchTransition from './GlitchTransition';
@@ -67,21 +67,21 @@ export default function Presentation() {
   }, []);
 
   const slideConfig = useMemo(() => [
-    { component: S01_Cover,      totalSteps: 1, eyeState: 'normal',  useGlitch: false, mascotPos: 'bottom-right' },
-    { component: S02_WhatChanged,totalSteps: 2, eyeState: 'threat',  useGlitch: true,  mascotPos: 'bottom-left'  },
-    { component: S03_AIWeapon,   totalSteps: 4, eyeState: 'threat',  useGlitch: true,  mascotPos: 'top-right'    },
-    { component: S04_AIShield,   totalSteps: 4, eyeState: 'safe',    useGlitch: false, mascotPos: 'top-left'     },
-    { component: S05_BigPlayers, totalSteps: 3, eyeState: 'normal',  useGlitch: false, mascotPos: 'bottom-right' },
-    { component: S06_Mythos,     totalSteps: 4, eyeState: 'threat',  useGlitch: true,  mascotPos: 'bottom-left'  },
-    { component: S07_Benchmarks, totalSteps: 4, eyeState: 'excited', useGlitch: false, mascotPos: 'top-right'    },
-    { component: S08_Escape,     totalSteps: 4, eyeState: 'threat',  useGlitch: true,  mascotPos: 'bottom-left'  },
-    { component: S09_Glasswing,  totalSteps: 3, eyeState: 'safe',    useGlitch: false, mascotPos: 'bottom-right' },
-    { component: S10_Protect,    totalSteps: 4, eyeState: 'safe',    useGlitch: false, mascotPos: 'top-left'     },
-    { component: S11_Economics,  totalSteps: 2, eyeState: 'threat',  useGlitch: false, mascotPos: 'top-right'    },
-    { component: S12_VercelCase, totalSteps: 5, eyeState: 'threat',  useGlitch: true,  mascotPos: 'bottom-left'  },
-    { component: S12_LabSQL,     totalSteps: 1, eyeState: 'excited', useGlitch: false, mascotPos: 'bottom-left'  },
-    { component: S13_LabPrompt,  totalSteps: 1, eyeState: 'excited', useGlitch: false, mascotPos: 'bottom-right' },
-    { component: S14_Ending,     totalSteps: 1, eyeState: 'wink',    useGlitch: false, mascotPos: 'bottom-right' },
+    { component: S01_Cover,      totalSteps: 1, useGlitch: false },
+    { component: S02_WhatChanged,totalSteps: 2, useGlitch: true  },
+    { component: S03_AIWeapon,   totalSteps: 4, useGlitch: true  },
+    { component: S04_AIShield,   totalSteps: 4, useGlitch: false },
+    { component: S05_BigPlayers, totalSteps: 3, useGlitch: false },
+    { component: S06_Mythos,     totalSteps: 4, useGlitch: true  },
+    { component: S07_Benchmarks, totalSteps: 4, useGlitch: false },
+    { component: S08_Escape,     totalSteps: 4, useGlitch: true  },
+    { component: S09_Glasswing,  totalSteps: 3, useGlitch: false },
+    { component: S10_Protect,    totalSteps: 4, useGlitch: false },
+    { component: S11_Economics,  totalSteps: 2, useGlitch: false },
+    { component: S12_VercelCase, totalSteps: 5, useGlitch: true  },
+    { component: S12_LabSQL,     totalSteps: 1, useGlitch: false },
+    { component: S13_LabPrompt,  totalSteps: 1, useGlitch: false },
+    { component: S14_Ending,     totalSteps: 1, useGlitch: false },
   ], []);
 
   const totalSlides = slideConfig.length;
@@ -169,11 +169,7 @@ export default function Presentation() {
           </Slide>
         </AnimatePresence>
 
-        <Mascot
-          eyeState={activeConfig.eyeState}
-          position={activeConfig.mascotPos}
-          size={70}
-        />
+        <SlideSticker slideNumber={currentSlide + 1} currentStep={currentStep} />
 
         <ProgressBar
           currentSlide={currentSlide}
