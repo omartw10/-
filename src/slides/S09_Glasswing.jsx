@@ -165,6 +165,47 @@ export default function S09_Glasswing({ currentStep }) {
           ))}
         </motion.div>
       )}
+      {/* 3 Pillars */}
+      {currentStep >= 3 && (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          style={{
+            display: 'flex', flexDirection: 'column', gap: '0.6rem',
+            width: '100%', maxWidth: '800px', marginTop: '0.5rem'
+          }}
+        >
+          {[
+            { num: '01', title: 'الفحص الاستباقي', text: 'فحص البنية التحتية وتصحيح الثغرات قبل اكتشافها من المهاجمين.' },
+            { num: '02', title: 'دعم Open Source', text: 'ائتمانات وتبرعات لمنظمات الأمن مفتوحة المصدر لتعزيز دفاعاتها.' },
+            { num: '03', title: 'التنسيق الحكومي', text: 'إطلاع وكالات الأمن القومي على القدرات لضمان صمود البنية الوطنية.' },
+          ].map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.15 }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '12px',
+                background: 'var(--bg-card)', border: '1px solid var(--border-light)',
+                padding: '10px 16px', borderRadius: '8px',
+              }}
+            >
+              <div style={{
+                fontFamily: 'var(--font-pixel)', fontSize: '10px',
+                color: 'white', background: 'var(--primary)',
+                width: '28px', height: '28px', borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+              }}>{item.num}</div>
+              <div style={{ fontFamily: 'var(--font-arabic)', fontSize: '14px', color: 'var(--text-main)', textAlign: 'right' }}>
+                <strong style={{ color: 'var(--primary)' }}>{item.title}: </strong>
+                {item.text}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
     </div>
   );
 }

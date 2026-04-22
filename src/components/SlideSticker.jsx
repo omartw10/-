@@ -27,13 +27,13 @@ const stickerMap = {
     { src: '/slide_12.png', width: 110, bottom: '2%', right: '2%', rotate: -2 },
   ],
   13: [
-    { src: '/slide_13.png', width: 120, top: '4%', left: '4%', rotate: -2 },
+    { src: '/slide_13.png', width: 120, bottom: '4%', left: '4%', rotate: -2 },
   ],
   14: [
-    { src: '/slide_14.png', width: 120, top: '4%', left: '4%', rotate: 2 },
+    { src: '/slide_14.png', width: 120, bottom: '4%', left: '4%', rotate: 2 },
   ],
   15: [
-    { src: '/slide_15.png', width: 160, bottom: '5%', right: '5%', rotate: -2 },
+    { src: '/slide_15.png', width: 110, bottom: '6%', left: '6%', rotate: -2 },
   ],
 };
 

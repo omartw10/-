@@ -26,6 +26,14 @@ const breaches = [
     '  → Purpose: bypass content safety filters',
     '  → Result: partial SUCCESS',
   ],
+  [
+    '> [LIVE — 19.04.2026] Vercel breach confirmed',
+    '  → Vector: Roblox script → Lumma Stealer → Context.ai',
+    '  → Pivot: Google OAuth hijack → internal access',
+    '  → Exfil: 580 employees · tokens · source code',
+    '  → Next.js: unaffected (confirmed)',
+    '  → Investigation: Mandiant engaged █',
+  ],
 ];
 
 function TypewriterGroup({ lines, onComplete }) {
