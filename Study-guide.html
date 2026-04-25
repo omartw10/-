@@ -586,6 +586,171 @@
   }
   .ic-text .tag.red { background: rgba(255,82,82,0.1); color: var(--red); }
 
+  /* ── DEEPFAKE DEMO BUTTON ── */
+  .deepfake-demo-wrapper {
+    margin: 2.5rem 0 1rem;
+    text-align: center;
+  }
+  .deepfake-demo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 2.8rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-ar);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(211, 125, 100, 0.3), 0 1px 3px rgba(0,0,0,0.1);
+    text-decoration: none;
+  }
+  .deepfake-demo-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transition: left 0.5s ease;
+  }
+  .deepfake-demo-btn:hover::before {
+    left: 100%;
+  }
+  .deepfake-demo-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(211, 125, 100, 0.45), 0 3px 8px rgba(0,0,0,0.15);
+  }
+  .deepfake-demo-btn:active {
+    transform: translateY(-1px);
+  }
+  .deepfake-demo-btn .btn-icon {
+    width: 42px;
+    height: 42px;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .deepfake-demo-btn .btn-icon::after {
+    content: '';
+    width: 0; height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 14px solid #fff;
+    margin-left: 3px;
+  }
+  .deepfake-demo-btn .btn-icon-pulse {
+    position: absolute;
+    top: -4px; left: -4px; right: -4px; bottom: -4px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    animation: pulse-ring 2s ease-out infinite;
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+  .deepfake-demo-btn .btn-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.3;
+  }
+  .deepfake-demo-btn .btn-label {
+    font-family: var(--font-pixel);
+    font-size: 8px;
+    letter-spacing: 3px;
+    opacity: 0.8;
+    margin-bottom: 2px;
+  }
+  .deepfake-demo-btn .btn-title {
+    font-size: 19px;
+    font-weight: 700;
+  }
+
+  /* ── VIDEO MODAL ── */
+  .video-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(6px);
+  }
+  .video-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+  .video-modal {
+    width: 90vw;
+    max-width: 900px;
+    background: #1a1a1a;
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 60px rgba(211, 125, 100, 0.3);
+    position: relative;
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .video-modal-overlay.active .video-modal {
+    transform: scale(1) translateY(0);
+  }
+  .video-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1.2rem;
+    background: #2D2D2D;
+    border-bottom: 1px solid var(--primary);
+  }
+  .video-modal-title {
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    color: var(--primary);
+    letter-spacing: 2px;
+  }
+  .video-modal-close {
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: 1px solid rgba(211,125,100,0.3);
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-family: var(--font-mono);
+  }
+  .video-modal-close:hover {
+    background: var(--primary);
+    color: #fff;
+  }
+  .video-modal-body {
+    position: relative;
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+  }
+  .video-modal-body iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
   /* footer */
   footer {
     background: var(--bg-darker);
@@ -2028,6 +2193,32 @@
       <div class="highlight-label">// الجملة التي تبقى معك</div>
       <p style="font-size:16px;line-height:1.8">مهمتك كمهندس: أن <strong>تفهم العدو</strong> قبل أن يضرب.</p>
     </div>
+
+    <!-- DeepFake Demo Button -->
+    <div class="deepfake-demo-wrapper">
+      <button class="deepfake-demo-btn" id="deepfake-play-btn" onclick="openDeepfakeModal()">
+        <span class="btn-icon">
+          <span class="btn-icon-pulse"></span>
+        </span>
+        <span class="btn-text">
+          <span class="btn-label">LIVE DEMO</span>
+          <span class="btn-title">شاهد مثال DeepFake حقيقي</span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- DeepFake Video Modal -->
+  <div class="video-modal-overlay" id="deepfakeModal">
+    <div class="video-modal">
+      <div class="video-modal-header">
+        <span class="video-modal-title">▶ DEEPFAKE DEMO</span>
+        <button class="video-modal-close" onclick="closeDeepfakeModal()">✕</button>
+      </div>
+      <div class="video-modal-body" id="deepfakeVideoContainer">
+        <!-- iframe injected dynamically on open -->
+      </div>
+    </div>
   </div>
 
 </div>
@@ -2037,6 +2228,36 @@
   <p>دليل الدراسة الكامل · <span>الأمن السيبراني في عصر الذكاء الاصطناعي</span></p>
   <p>عمر أبو الطويرات · عبدالمالك السائح · <span>cypersecurity-ai.vercel.app</span></p>
 </footer>
+
+<script>
+  function openDeepfakeModal() {
+    const modal = document.getElementById('deepfakeModal');
+    const container = document.getElementById('deepfakeVideoContainer');
+    // Inject iframe on open for immediate playback
+    container.innerHTML = '<iframe src="https://drive.google.com/file/d/1kxvWfiMQ-bWWuEVWxS-9VEkb8rL2KBBL/preview" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDeepfakeModal() {
+    const modal = document.getElementById('deepfakeModal');
+    const container = document.getElementById('deepfakeVideoContainer');
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    // Remove iframe to stop video
+    setTimeout(() => { container.innerHTML = ''; }, 400);
+  }
+
+  // Close on overlay click
+  document.getElementById('deepfakeModal').addEventListener('click', function(e) {
+    if (e.target === this) closeDeepfakeModal();
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeDeepfakeModal();
+  });
+</script>
 
 </body>
 </html>

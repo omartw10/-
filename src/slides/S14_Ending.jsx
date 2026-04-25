@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState, useCallback } from 'react';
 import guideUrl from '../../Study-guide.html?url';
 
 function TypewriterText({ text, delay = 0, speed = 40, style }) {
@@ -79,6 +79,146 @@ function DownloadButton() {
         </>
       )}
     </motion.button>
+  );
+}
+
+/* ── DeepFake Video Button + Modal ── */
+const DEEPFAKE_VIDEO_URL = 'https://drive.google.com/file/d/1kxvWfiMQ-bWWuEVWxS-9VEkb8rL2KBBL/preview';
+
+const pulseKeyframes = `
+@keyframes dfPulse {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+`;
+
+function DeepFakeButton() {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const open = useCallback(() => setModalOpen(true), []);
+  const close = useCallback(() => setModalOpen(false), []);
+
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') close(); };
+    if (modalOpen) window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [modalOpen, close]);
+
+  return (
+    <>
+      {/* inject pulse keyframe once */}
+      <style>{pulseKeyframes}</style>
+
+      <motion.button
+        whileHover={{ scale: 1.06, y: -2 }}
+        whileTap={{ scale: 0.96 }}
+        onClick={open}
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: '10px',
+          padding: '10px 22px',
+          background: 'linear-gradient(135deg, #131315 0%, #1E1E22 100%)',
+          color: '#fff', border: '1.5px solid var(--primary)',
+          borderRadius: '8px', cursor: 'pointer',
+          fontFamily: 'var(--font-arabic)', fontSize: '15px', fontWeight: 700,
+          boxShadow: '0 4px 18px rgba(216,120,88,0.25), inset 0 1px 0 rgba(255,255,255,0.06)',
+          transition: 'box-shadow 0.3s',
+          position: 'relative', overflow: 'hidden',
+        }}
+      >
+        {/* play icon with pulse */}
+        <span style={{
+          width: 30, height: 30, borderRadius: '50%',
+          background: 'var(--primary)', display: 'flex',
+          alignItems: 'center', justifyContent: 'center',
+          flexShrink: 0, position: 'relative',
+        }}>
+          {/* pulse ring */}
+          <span style={{
+            position: 'absolute', inset: -3, borderRadius: '50%',
+            border: '2px solid var(--primary)',
+            animation: 'dfPulse 2s ease-out infinite',
+          }} />
+          {/* triangle */}
+          <span style={{
+            width: 0, height: 0,
+            borderTop: '6px solid transparent',
+            borderBottom: '6px solid transparent',
+            borderLeft: '10px solid #fff',
+            marginLeft: 2,
+          }} />
+        </span>
+        <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.2 }}>
+          <span style={{ fontFamily: 'var(--font-pixel)', fontSize: '7px', letterSpacing: 2, color: 'var(--primary)', marginBottom: 2 }}>
+            LIVE DEMO
+          </span>
+          <span>شاهد مثال DeepFake</span>
+        </span>
+      </motion.button>
+
+      {/* ── Modal ── */}
+      <AnimatePresence>
+        {modalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={close}
+            style={{
+              position: 'fixed', inset: 0, zIndex: 10000,
+              background: 'rgba(0,0,0,0.88)', backdropFilter: 'blur(8px)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.85, y: 30 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.85, y: 30 }}
+              transition={{ type: 'spring', damping: 22, stiffness: 260 }}
+              onClick={e => e.stopPropagation()}
+              style={{
+                width: '88vw', maxWidth: 860,
+                background: '#1a1a1a', border: '2px solid var(--primary)',
+                borderRadius: '10px', overflow: 'hidden',
+                boxShadow: '0 0 80px rgba(216,120,88,0.25)',
+              }}
+            >
+              {/* header */}
+              <div style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '10px 16px', background: '#222',
+                borderBottom: '1px solid var(--primary)',
+              }}>
+                <span style={{ fontFamily: 'var(--font-pixel)', fontSize: 9, color: 'var(--primary)', letterSpacing: 2 }}>
+                  ▶ DEEPFAKE DEMO
+                </span>
+                <button
+                  onClick={close}
+                  style={{
+                    width: 28, height: 28, background: 'none',
+                    border: '1px solid rgba(216,120,88,0.4)', borderRadius: 4,
+                    color: 'var(--primary)', cursor: 'pointer', fontSize: 16,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontFamily: 'var(--font-mono)', transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'var(--primary)'; e.currentTarget.style.color = '#fff'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'var(--primary)'; }}
+                >✕</button>
+              </div>
+              {/* video 16:9 */}
+              <div style={{ position: 'relative', paddingTop: '56.25%' }}>
+                <iframe
+                  src={DEEPFAKE_VIDEO_URL}
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none' }}
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -189,9 +329,11 @@ export default function S14_Ending() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 4.2 }}
-          style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}
+          style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}
         >
           <DownloadButton />
+
+          <DeepFakeButton />
 
           <button
             onClick={() => window.location.reload()}
